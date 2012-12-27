@@ -18,7 +18,7 @@ function game:init(width, height)
 	end
 	--Add entities to the map
 	self.entities = {}
-	local entitiesNumber = math.random(1,6)
+	local entitiesNumber = math.random(1,4)
 	for i = 0, entitiesNumber do
 		local x, y
 		repeat
@@ -41,6 +41,7 @@ end
 -- Finds (or not) an entity at a given position
 -- (Yes, its complexity is O(n), and that sucks)
 function game:find(x,y)
+
 	for i,v in ipairs(self.entities) do
 		if v.x == x and v.y == y then
 			return v
@@ -50,7 +51,17 @@ function game:find(x,y)
 end
 
 function game:empty(x,y)
+	if x < 0 or y < 0 or x >= self.width or y >= self.height then
+		return false
+	end
 	return game:find(x,y) == nil
+end
+-- Add an entity to the game
+function game:add(entity)
+	if entity ~= nil then
+		table.insert(self.entities,entity)
+		print("Adding new entity to the game at position",entity.x,entity.y)
+	end
 end
 -- Drawing of the game objects
 function game:draw()

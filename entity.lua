@@ -67,9 +67,16 @@ function entity:move()
 		-- Change the direction if we can't move
 		if not(self:moveTo(self.direction)) then
 			self.direction = 3 - self.direction
+			-- Breed with the other entity too
+			local moveX, moveY = self:moveCoordinates(self.direction)
+			local another = game:find(self.x + moveX, self.y + moveY)		
+			if another ~= nil then
+				game:add(self:breed(another))
+			end
 		end
 	end
 end
+
 -- Mutates the entity
 function entity:mutate()
 	if math.random(0,config.chanceToMutate) == 1 then
@@ -81,6 +88,43 @@ function entity:mutate()
 		end
 	end
 end
+
+
+-- Breed the entity with another one
+function entity:breed(another)
+	-- Calculate the new entity coordinates
+	local x, y
+	local trials = 0
+	repeat
+		trials = trials + 1
+		local direction = math.random(0,3)
+		local moveX, moveY = self:moveCoordinates(direction)
+		x = self.x + moveX
+		y = self.y + moveY
+		
+	until game:empty(x,y) or trials > 5
+
+	if trials < 5 then
+		-- Build the entity object
+		local o = entity:new(self.owner,x,y)
+		-- crossover
+		local limit = math.random(0,80)
+		
+		for i = 0, limit do
+			o.code[i] = self.code[i]
+		end
+		for i = limit, 80 do
+			o.code[i] = another.code[i]
+		end
+		
+		return o
+	else
+		return nil
+	end	
+	
+end
+
+-- Change the current direction of the entity
 function entity:changeDirection()
 	local trials = 5
 	-- Change the direction of the entity
@@ -117,4 +161,18 @@ function entity:moveTo(direction)
 	else
 		return false
 	end
+end
+
+function entity:moveCoordinates(direction)
+	local moveX, moveY = 0,0
+	if direction == 0 then
+		moveX = 1
+	elseif direction == 3 then
+		moveX = -1
+	elseif direction == 1 then
+		moveY = 1
+	elseif direction == 2 then
+		moveY = -1
+	end
+	return moveX, moveY
 end
