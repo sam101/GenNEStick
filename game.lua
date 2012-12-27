@@ -18,13 +18,25 @@ function game:init(width, height)
 	end
 	--Add entities to the map
 	self.entities = {}
-	table.insert(self.entities,entity:new(1,0,0))
+	local entitiesNumber = math.random(0,10)
+	for i = 0, entitiesNumber do
+		local x, y
+		repeat
+			x = math.random(0, width - 1)
+			y = math.random(0, height - 1)
+		until self:find(x,y) == nil
+		table.insert(self.entities,entity:new(1,x,y))		
+	end
+	
 	-- Sets the counter of the game
 	self.counter = 0
 end
 -- Called every tick of the game
 function game:tick()
-	-- Move the entities
+	-- Let the entities do their life
+	for i, v in ipairs(self.entities) do
+		v:draw()
+	end
 end
 -- Finds (or not) an entity at a given position
 -- (Yes, its complexity is O(n), and that sucks)
