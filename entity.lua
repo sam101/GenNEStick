@@ -60,42 +60,61 @@ function entity:draw()
 end
 -- Move the entity
 function entity:move()
-	-- Move the entity
-	local direction, moveX, moveY
-	trials = 0
-	repeat
-		direction = math.random(0,3)
-		if direction == 0 then
-			moveX = 1
-			moveY = 0
-		elseif direction == 1 then
-			moveX = -1
-			moveY = 0
-		elseif direction == 2 then
-			moveX = 0
-			moveY = 1
-		elseif direction == 3 then
-			moveX = 0
-			moveY = -1
+	-- Change randomly the direction
+	if math.random(0,5) == 4 then
+		self:changeDirection()
+	else
+		-- Change the direction if we can't move
+		if not(self:moveTo(self.direction)) then
+			self.direction = 3 - self.direction
 		end
-		trials = trials + 1
-	until (self.x + moveX) >= 0 and (self.x + moveX) < game.width 
-		   and (self.y + moveY) >= 0 
-		   and (self.y + moveY) < game.height
-		   and game:empty(self.x + moveX, self.y + moveY) or trials > 10
-	-- Sets the new coordinates
-	if trials <= 10 then
-		self.x = self.x + moveX
-		self.y = self.y + moveY
-		self.direction = direction
 	end
 end
 -- Mutates the entity
 function entity:mutate()
-	local toModify = math.random(0,80)
-	if self.code[toModify] == 1 then
-		self.code[toModify] = 0
+	if math.random(0,config.chanceToMutate) == 1 then
+		local toModify = math.random(0,80)
+		if self.code[toModify] == 1 then
+			self.code[toModify] = 0
+		else
+			self.code[toModify] = 1
+		end
+	end
+end
+function entity:changeDirection()
+	local trials = 5
+	-- Change the direction of the entity
+	repeat
+		direction = math.random(0,3)
+		trials = trials + 1
+	until self:moveTo(direction) or trials > 5
+	self.direction = direction
+end
+-- Tries to move the entity into a direction, returns true
+-- if it succedded, false otherwise
+function entity:moveTo(direction)
+	local moveX = 0
+	local moveY = 0
+	
+	if direction == 0 then
+		moveX = 1
+	elseif direction == 3 then
+		moveX = -1
+	elseif direction == 1 then
+		moveY = 1
+	elseif direction == 2 then
+		moveY = -1
+	end
+	if game:empty(self.x + moveX, self.y + moveY) 
+	   and (self.x + moveX) >= 0 
+	   and (self.y + moveY) >= 0
+	   and (self.x + moveX) < game.width 
+	   and (self.y + moveY) < game.height then
+	   
+		self.x = self.x + moveX
+		self.y = self.y + moveY
+		return true
 	else
-		self.code[toModify] = 1
+		return false
 	end
 end

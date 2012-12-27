@@ -4,7 +4,8 @@ config = {
 	gameWidth = 16,
 	gameHeight = 13,
 	reduction = 2,
-	ticks = 500
+	ticks = 250,
+	chanceToMutate = 42
 	
 }
 -- Function called by LÖVE when initialising the game
