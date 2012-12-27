@@ -12,14 +12,26 @@ function love.load()
 	-- Sets the current timer
 	timer = 0
 	ticks = 0
+	ticksInterval = config.ticks
 	-- Inits the game object
 	game:init(config.gameWidth,config.gameHeight)
 end
 -- Update the current game state
 function love.update(dt)
+	if love.keyboard.isDown("p") then
+		ticksInterval = ticksInterval + dt * 1000
+		if ticksInterval < 0 then
+			ticksInterval = 0
+		end
+	elseif love.keyboard.isDown("m") then
+		ticksInterval = ticksInterval - dt * 1000
+		if ticksInterval < 0 then
+			ticksInterval = 0
+		end
+	end
 	timer = timer + dt
 	-- Make a tick every 1 second.	
-	if timer > config.ticks / 1000 then
+	if timer > ticksInterval / 1000 then
 		timer = 0
 		ticks = ticks + 1
 		-- Call the update method of the game
@@ -33,5 +45,5 @@ function love.draw()
 	game:draw()
 	--Draw the "test" text
 	love.graphics.setColor(colors[33])
-	love.graphics.print("GenNEStick." .. ticks,0,0)
+	love.graphics.print("GenNEStick." .. ticks .. ' - ' .. ticksInterval,0,0)
 end

@@ -16,28 +16,36 @@ function game:init(width, height)
 			self.map[i][j] = 4 -- Purple color (found by inadvertance)
 		end
 	end
+	-- Generate the fittest element
+	self.fittest = entity:new(1,width - 1,-1)	
 	--Add entities to the map
 	self.entities = {}
-	local entitiesNumber = math.random(1,4)
+	local entitiesNumber = math.random(3,10)
 	for i = 0, entitiesNumber do
 		local x, y
 		repeat
 			x = math.random(0, width - 1)
 			y = math.random(0, height - 1)
 		until self:find(x,y) == nil
-		table.insert(self.entities,entity:new(1,x,y))		
+		table.insert(self.entities,entity:new(1,x,y))
 	end
-	
+		
 	-- Sets the counter of the game
 	self.counter = 0
 end
 -- Called every tick of the game
 function game:tick()
+	self.counter = self.counter + 1
 	-- Let the entities do their life
 	for i, v in ipairs(self.entities) do
 		v:tick()
 	end
 end
+-- Kills a certain number of entities according to their fitness
+function game:kill()
+	
+end
+
 -- Finds (or not) an entity at a given position
 -- (Yes, its complexity is O(n), and that sucks)
 function game:find(x,y)
@@ -60,7 +68,7 @@ end
 function game:add(entity)
 	if entity ~= nil then
 		table.insert(self.entities,entity)
-		print("Adding new entity to the game at position",entity.x,entity.y)
+		print("Adding new entity to the game at position",entity.x,entity.y,self:fitness(entity))
 	end
 end
 -- Drawing of the game objects
@@ -76,6 +84,20 @@ function game:draw()
 	for i, v in ipairs(self.entities) do
 		v:draw()
 	end
+	-- Draw the fittest
+	self.fittest:draw()
 end
-
+-- Calculate the fitness of an entity
+function game:fitness(entity)
+	local fitness = 0
+	
+	for i = 0, 80 do
+		if entity.code[i] == self.fittest.code[i] then
+			fitness = fitness + 1
+		end
+	end
+	
+	return fitness
+	
+end
 print('Game module loaded.')
