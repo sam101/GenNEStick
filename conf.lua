@@ -1,8 +1,9 @@
 -- Game configuration file
 config = {
-	tileSize = 32,
-	gameWidth = 32,
-	gameHeight = 27
+	tileSize = 64,
+	gameWidth = 16,
+	gameHeight = 13,
+	reduction = 2
 	
 }
 -- Function called by LÖVE when initialising the game
