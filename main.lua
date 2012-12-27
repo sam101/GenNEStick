@@ -19,7 +19,7 @@ end
 function love.update(dt)
 	timer = timer + dt
 	-- Make a tick every 1 second.	
-	if timer > 1 then
+	if timer > config.ticks / 1000 then
 		timer = 0
 		ticks = ticks + 1
 		-- Call the update method of the game

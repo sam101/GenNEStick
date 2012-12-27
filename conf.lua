@@ -3,7 +3,8 @@ config = {
 	tileSize = 64,
 	gameWidth = 16,
 	gameHeight = 13,
-	reduction = 2
+	reduction = 2,
+	ticks = 500
 	
 }
 -- Function called by LÖVE when initialising the game
@@ -16,7 +17,7 @@ function love.conf(t)
     t.console = false           -- Attach a console (boolean, Windows only)
     t.release = false           -- Enable release mode (boolean)
     t.screen.width = config.tileSize * config.gameWidth         -- The window width (number)
-    t.screen.height = config.tileSize * config.gameHeight       -- The window height (number)
+    t.screen.height = config.tileSize * (config.gameHeight + 1)       -- The window height (number)
     t.screen.fullscreen = false -- Enable fullscreen (boolean)
     t.screen.vsync = true       -- Enable vertical sync (boolean)
     t.screen.fsaa = 0           -- The number of FSAA-buffers (number)

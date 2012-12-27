@@ -18,7 +18,7 @@ function game:init(width, height)
 	end
 	--Add entities to the map
 	self.entities = {}
-	local entitiesNumber = math.random(0,10)
+	local entitiesNumber = math.random(1,6)
 	for i = 0, entitiesNumber do
 		local x, y
 		repeat
@@ -35,7 +35,7 @@ end
 function game:tick()
 	-- Let the entities do their life
 	for i, v in ipairs(self.entities) do
-		v:draw()
+		v:tick()
 	end
 end
 -- Finds (or not) an entity at a given position
@@ -47,6 +47,10 @@ function game:find(x,y)
 		end
 	end
 	return nil
+end
+
+function game:empty(x,y)
+	return game:find(x,y) == nil
 end
 -- Drawing of the game objects
 function game:draw()
