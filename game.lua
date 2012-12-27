@@ -1,5 +1,6 @@
 -- Main file for the game mechanics.
 require('colors')
+require('conf')
 
 game = {}
 -- Game object initialisation
@@ -23,7 +24,7 @@ function game:draw()
 	for i = 0, self.width - 1 do
 		for j = 0, self.height - 1 do
 			love.graphics.setColor(colors[self.map[i][j]])
-			love.graphics.rectangle('fill',i * 16,j * 16 + 16,16,16)
+			love.graphics.rectangle('fill',i * config.tileSize,(j + 1) * config.tileSize,config.tileSize,config.tileSize)
 		end
 	end
 end

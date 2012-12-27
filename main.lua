@@ -6,14 +6,14 @@ function love.load()
 	print('Welcome to GenNEStick !')
 	--Sets the graphic mode
 	--Load the font of the game
-	font = love.graphics.newFont("nintendo_nes_font.ttf",16)
+	font = love.graphics.newFont("nintendo_nes_font.ttf",config.tileSize)
 	love.graphics.setFont(font)
 	love.graphics.setBackgroundColor(0,0,0)
 	-- Sets the current timer
 	timer = 0
 	ticks = 0
 	-- Inits the game object
-	game:init(32,27)
+	game:init(config.gameWidth,config.gameHeight)
 end
 -- Update the current game state
 function love.update(dt)

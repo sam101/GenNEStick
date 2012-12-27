@@ -1,3 +1,11 @@
+-- Game configuration file
+config = {
+	tileSize = 32,
+	gameWidth = 32,
+	gameHeight = 27
+	
+}
+-- Function called by LÖVE when initialising the game
 function love.conf(t)
     t.title = "GenNEStick"        -- The title of the window the game is in (string)
     t.author = "Samuel Lepetit"        -- The author of the game (string)
@@ -6,8 +14,8 @@ function love.conf(t)
     t.version = "0.8.0"         -- The LÖVE version this game was made for (string)
     t.console = false           -- Attach a console (boolean, Windows only)
     t.release = false           -- Enable release mode (boolean)
-    t.screen.width = 512        -- The window width (number)
-    t.screen.height = 448       -- The window height (number)
+    t.screen.width = config.tileSize * config.gameWidth         -- The window width (number)
+    t.screen.height = config.tileSize * config.gameHeight       -- The window height (number)
     t.screen.fullscreen = false -- Enable fullscreen (boolean)
     t.screen.vsync = true       -- Enable vertical sync (boolean)
     t.screen.fsaa = 0           -- The number of FSAA-buffers (number)
