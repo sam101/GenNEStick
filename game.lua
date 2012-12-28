@@ -40,10 +40,17 @@ function game:tick()
 	for i, v in ipairs(self.entities) do
 		v:tick()
 	end
+	game:kill()
 end
 -- Kills a certain number of entities according to their fitness
 function game:kill()
-	
+	-- Kill according to their fitness and if they have too much neighbors
+	for i,v in ipairs(self.entities) do
+		print(game:fitness(v),math.pow(1.2,game:fitness(v)))
+		if math.random(1,math.pow(1.2,game:fitness(v))) == 1 then
+			table.remove(self.entities,i)
+		end		
+	end	
 end
 
 -- Finds (or not) an entity at a given position
