@@ -20,7 +20,7 @@ function game:init(width, height)
 	self.fittest = entity:new(1,width - 1,-1)	
 	--Add entities to the map
 	self.entities = {}
-	local entitiesNumber = math.random(3,10)
+	local entitiesNumber = math.random(3,25)
 	for i = 0, entitiesNumber do
 		local x, y
 		repeat
@@ -40,19 +40,25 @@ function game:tick()
 	for i, v in ipairs(self.entities) do
 		v:tick()
 	end
+	-- Kill the entities 
 	game:kill()
 end
 -- Kills a certain number of entities according to their fitness
 function game:kill()
 	-- Kill according to their fitness and if they have too much neighbors
 	for i,v in ipairs(self.entities) do
-		print(game:fitness(v),math.pow(1.2,game:fitness(v)))
-		if math.random(1,math.pow(1.2,game:fitness(v))) == 1 then
+		print(i,game:fitness(v),game:killNumber(v),table.getn(self.entities))
+		if math.random(1,game:killNumber(v)) == 1 then
+		    print("Killing entity number ",i)
 			table.remove(self.entities,i)
 		end		
 	end	
 end
-
+-- Calculates the chance to be killed for a given entity
+-- It should be in function of it fitness/number of entities in the game, etc.
+function game:killNumber(entity)
+	return math.floor(math.pow(1.2,game:fitness(entity))) / math.floor(math.pow(1.2,table.getn(game.entities)))
+end
 -- Finds (or not) an entity at a given position
 -- (Yes, its complexity is O(n), and that sucks)
 function game:find(x,y)
@@ -64,7 +70,7 @@ function game:find(x,y)
 	end
 	return nil
 end
-
+-- Returns if a given position is empty in the game space
 function game:empty(x,y)
 	if x < 0 or y < 0 or x >= self.width or y >= self.height then
 		return false
