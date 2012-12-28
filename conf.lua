@@ -1,6 +1,6 @@
 -- Game configuration file
 config = {
-	tileSize = 64,
+	tileSize = 48,
 	gameWidth = 16,
 	gameHeight = 13,
 	reduction = 2,
