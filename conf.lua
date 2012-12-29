@@ -5,7 +5,9 @@ config = {
 	gameHeight = 13,
 	reduction = 2,
 	ticks = 250,
-	chanceToMutate = 4200
+	chanceToMutate = 4200,
+	baseEnergy = 1000,
+	breedCost = 1
 	
 }
 -- Function called by LÖVE when initialising the game

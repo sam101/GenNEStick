@@ -26,7 +26,7 @@ end
 -- Called at every tick, do stuff with the entity
 function entity:tick()
 	self:move()
-	self:mutate()
+	self:mutate(config.chanceToMutate)
 end
 
 -- Draws an entity
@@ -78,8 +78,8 @@ function entity:move()
 end
 
 -- Mutates the entity
-function entity:mutate()
-	if math.random(0,config.chanceToMutate) == 1 then
+function entity:mutate(chanceToMutate)
+	if math.random(0,chanceToMutate) == 1 then
 		local toModify = math.random(0,80)
 		if self.code[toModify] == 1 then
 			self.code[toModify] = 0
@@ -92,6 +92,9 @@ end
 
 -- Breed the entity with another one
 function entity:breed(another)
+	if game.energy > 0 or not(game.canBreed) then
+		return nil
+	end
 	-- Calculate the new entity coordinates
 	local x, y
 	local trials = 0
@@ -116,7 +119,12 @@ function entity:breed(another)
 		for i = limit, 80 do
 			o.code[i] = another.code[i]
 		end
-		
+		-- Mutation
+		for i = 0, math.random(4) do
+			self:mutate(2)
+		end
+		-- Remove the energy
+		game:delEnergy(config.breedCost)
 		return o
 	else
 		return nil
@@ -160,7 +168,7 @@ function entity:moveTo(direction)
 		return true
 	else
 		return false
-	end
+	end	
 end
 
 function entity:moveCoordinates(direction)

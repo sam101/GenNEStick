@@ -35,15 +35,15 @@ function love.update(dt)
 		timer = 0
 		ticks = ticks + 1
 		-- Call the update method of the game
-		game:tick()
-		
+		game:tick()	
 	end
+end
+-- Called when a key is pressed
+function love.keypressed(key, unicode)
+	game:keypressed(key, unicode)
 end
 -- Draw the various elements of the game
 function love.draw()
 	--Draw the game object
 	game:draw()
-	--Draw the "test" text
-	love.graphics.setColor(colors[33])
-	love.graphics.print("GenNEStick." .. ticks .. ' - ' .. ticksInterval,0,0)
 end

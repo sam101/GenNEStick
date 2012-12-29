@@ -8,6 +8,9 @@ game = {}
 function game:init(width, height)
 	self.width = width
 	self.height = height
+	self.canBreed = true
+	-- Initialise the energy counter
+	self.energy = config.baseEnergy
 	--Build the game map
 	self.map = {}
 	for i = 0, width - 1 do
@@ -33,6 +36,17 @@ function game:init(width, height)
 	-- Sets the counter of the game
 	self.counter = 0
 end
+function game:delEnergy(amount)
+	self.energy = self.energy - amount
+	self.energy = self.energy < 0 and 0 or self.energy
+end
+--Called every time a key is pressed
+function game:keypressed(key, unicode)
+	-- Toggle if the entities can breed
+	if key == "c" then
+		self.canBreed = not(self.canBreed)
+	end
+end
 -- Called every tick of the game
 function game:tick()
 	self.counter = self.counter + 1
@@ -47,9 +61,7 @@ end
 function game:kill()
 	-- Kill according to their fitness and if they have too much neighbors
 	for i,v in ipairs(self.entities) do
-		print(i,game:fitness(v),game:killNumber(v),table.getn(self.entities))
 		if math.random(1,game:killNumber(v)) == 1 then
-		    print("Killing entity number ",i)
 			table.remove(self.entities,i)
 		end		
 	end	
@@ -57,7 +69,7 @@ end
 -- Calculates the chance to be killed for a given entity
 -- It should be in function of it fitness/number of entities in the game, etc.
 function game:killNumber(entity)
-	return math.floor(math.pow(1.2,game:fitness(entity))) / math.floor(math.pow(1.2,table.getn(game.entities)))
+	return math.floor(math.pow(1.2,game:fitness(entity))) / math.floor(math.pow(1.25,table.getn(game.entities)))
 end
 -- Finds (or not) an entity at a given position
 -- (Yes, its complexity is O(n), and that sucks)
@@ -81,7 +93,8 @@ end
 function game:add(entity)
 	if entity ~= nil then
 		table.insert(self.entities,entity)
-		print("Adding new entity to the game at position",entity.x,entity.y,self:fitness(entity))
+		print("Adding new entity to the game at position (" .. entity.x .. "," .. entity.y .. 
+			  ") - " .. self:fitness(entity))
 	end
 end
 -- Drawing of the game objects
@@ -99,6 +112,10 @@ function game:draw()
 	end
 	-- Draw the fittest
 	self.fittest:draw()
+	-- Draw game information
+	love.graphics.setColor(colors[33])
+	love.graphics.print('C:' .. tostring(self.canBreed) .. ' - T:' .. ticksInterval .. ' - ' .. ticks,0,0)
+	love.graphics.print('E:' .. self.energy,0,config.tileSize / 2)
 end
 -- Calculate the fitness of an entity
 function game:fitness(entity)
