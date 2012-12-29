@@ -2,6 +2,7 @@
 require('colors')
 require('conf')
 require('entity')
+require('flag')
 
 game = {}
 -- Game object initialisation
@@ -32,7 +33,8 @@ function game:init(width, height)
 		until self:find(x,y) == nil
 		table.insert(self.entities,entity:new(1,x,y))
 	end
-		
+	-- Initialise the attract flag
+	self.attract = flag:new()
 	-- Sets the counter of the game
 	self.counter = 0
 end
@@ -46,6 +48,15 @@ function game:keypressed(key, unicode)
 	if key == "c" then
 		self.canBreed = not(self.canBreed)
 	end
+end
+-- Called when a mouse button is pressed
+function game:mousepressed(x, y, button)
+	local xC = math.floor(x / config.tileSize)
+	local yC = math.floor(y / config.tileSize)
+	
+	self.attract.x = xC
+	self.attract.y = yC
+	self.attract.visible = true
 end
 -- Called every tick of the game
 function game:tick()
@@ -116,6 +127,8 @@ function game:draw()
 	love.graphics.setColor(colors[33])
 	love.graphics.print('C:' .. tostring(self.canBreed) .. ' - T:' .. ticksInterval .. ' - ' .. ticks,0,0)
 	love.graphics.print('E:' .. self.energy,0,config.tileSize / 2)
+	-- Draw the flag
+	self.attract:draw()
 end
 -- Calculate the fitness of an entity
 function game:fitness(entity)

@@ -92,7 +92,7 @@ end
 
 -- Breed the entity with another one
 function entity:breed(another)
-	if game.energy > 0 or not(game.canBreed) then
+	if game.energy <= 0 or not(game.canBreed) then
 		return nil
 	end
 	-- Calculate the new entity coordinates

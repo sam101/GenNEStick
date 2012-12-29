@@ -42,6 +42,10 @@ end
 function love.keypressed(key, unicode)
 	game:keypressed(key, unicode)
 end
+-- Called when the mouse is pressed
+function love.mousepressed(x, y, button)
+	game:mousepressed(x,y,button)
+end
 -- Draw the various elements of the game
 function love.draw()
 	--Draw the game object
