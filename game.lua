@@ -51,12 +51,16 @@ function game:keypressed(key, unicode)
 end
 -- Called when a mouse button is pressed
 function game:mousepressed(x, y, button)
-	local xC = math.floor(x / config.tileSize)
-	local yC = math.floor(y / config.tileSize)
-	
-	self.attract.x = xC
-	self.attract.y = yC
-	self.attract.visible = true
+	if button == 'l' then
+		local xC = math.floor(x / config.tileSize)
+		local yC = math.floor(y / config.tileSize)
+		
+		self.attract.x = xC
+		self.attract.y = yC
+		self.attract.visible = true
+	else
+		self.attract.visible = false
+	end
 end
 -- Called every tick of the game
 function game:tick()
